@@ -1,0 +1,4 @@
+-- Datos de desarrollo local (no se aplican en producción).
+-- Para crear el primer administrador global, después de registrarte ejecutá en el SQL Editor:
+--   insert into public.platform_admins (user_id, note)
+--   select id, 'Propietario NOVANTIQ' from auth.users where email = 'TU-CORREO';

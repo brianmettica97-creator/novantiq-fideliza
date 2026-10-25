@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /panel
+Disallow: /admin
+Disallow: /operar
+Disallow: /mis-tarjetas

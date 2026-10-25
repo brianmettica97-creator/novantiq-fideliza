@@ -101,6 +101,10 @@ begin
     return case when v_s.current_period_end is not null
                   and v_s.current_period_end + make_interval(days => v_grace) > now()
                 then 'ok' else 'subscription_inactive' end;
+  elsif v_s.status in ('cancelled','paused') then
+    -- Cancelada: se respeta el período ya abonado.
+    return case when v_s.current_period_end is not null and v_s.current_period_end > now()
+                then 'ok' else 'subscription_inactive' end;
   end if;
   return 'subscription_inactive';
 end $$;
