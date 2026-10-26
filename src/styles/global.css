@@ -239,14 +239,14 @@ input[type='color'] { width: 52px; height: 46px; padding: 4px; border-radius: 12
 }
 
 /* Loyalty card --------------------------------------------------------------*/
-.lcard { position: relative; overflow: hidden; border-radius: 22px; padding: 20px; aspect-ratio: 1.586; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 16px 40px rgba(0,0,0,.45); isolation: isolate; width: 100%; max-width: 420px; }
+.lcard { position: relative; overflow: hidden; border-radius: 22px; padding: 20px; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.45); isolation: isolate; width: 100%; max-width: 420px; }
 .lcard::after { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(120% 80% at 100% 0%, rgba(255,255,255,.14), transparent 55%); pointer-events: none; }
 .lcard-head { display: flex; align-items: center; gap: 12px; }
 .lcard-logo { width: 44px; height: 44px; border-radius: 12px; object-fit: cover; background: rgba(255,255,255,.12); display: grid; place-items: center; font-weight: 800; font-family: var(--font-display); flex: none; overflow: hidden; }
 .lcard-merchant { font-size: .8rem; opacity: .75; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
 .lcard-name { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; line-height: 1.15; }
-.lcard-stamps { display: grid; grid-template-columns: repeat(var(--cols, 5), 1fr); gap: 8px; }
-.lcard-stamp { aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; border: 2px dashed currentColor; opacity: .35; }
+.lcard-stamps { display: grid; grid-template-columns: repeat(var(--cols, 5), 1fr); gap: 8px; justify-items: center; }
+.lcard-stamp { aspect-ratio: 1; width: 100%; max-width: 52px; border-radius: 50%; display: grid; place-items: center; border: 2px dashed currentColor; opacity: .35; }
 .lcard-stamp.on { opacity: 1; border-style: solid; animation: pop .3s ease-out; }
 .lcard-stamp svg { width: 55%; height: 55%; }
 @keyframes pop { 50% { transform: scale(1.15); } }

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BarChart3, Building2, Check, Gift, MousePointerClick, QrCode, ShieldCheck, Smartphone, Sparkles, Store, Users, Zap } from 'lucide-react';
+import { ArrowRight, BarChart3, Building2, Check, Coffee, Gift, MousePointerClick, QrCode, ShieldCheck, Smartphone, Sparkles, Store, Users, Zap } from 'lucide-react';
 import { LoyaltyCard } from '../../components/LoyaltyCard';
 import { InteractiveDemo } from '../../components/InteractiveDemo';
+import { CoffeeBuilder } from '../../components/CoffeeBuilder';
 import { RoiCalculator } from '../../components/RoiCalculator';
 import { CountUp, Reveal, RotatingWord, Tilt } from '../../components/Motion';
 import { Alert, Button, Input, Textarea } from '../../components/ui';
@@ -53,7 +54,7 @@ export function LandingPage() {
             <p className="hero-sub">Tarjetas de sellos, visitas y puntos en el celular de tus clientes. Se suman con un QR, vos premiás la fidelidad y ellos <strong>vuelven más seguido</strong>.</p>
             <div className="row mt-2">
               <Link to="/registro" className="btn btn-primary btn-lg btn-glow">Probar 14 días gratis <ArrowRight size={18} /></Link>
-              <a href="#demo" className="btn btn-lg btn-outline-glow"><MousePointerClick size={18} /> Probá la demo</a>
+              <a href="#arma-tu-tarjeta" className="btn btn-lg btn-outline-glow"><MousePointerClick size={18} /> Armá tu tarjeta</a>
             </div>
             <div className="hero-trust">
               <span><Check size={14} /> Sin tarjeta de crédito</span>
@@ -70,6 +71,18 @@ export function LandingPage() {
             <div className="floating-chip chip-a"><Gift size={14} /> ¡Premio desbloqueado!</div>
             <div className="floating-chip chip-b"><QrCode size={14} /> +1 sello</div>
           </div>
+        </div>
+      </section>
+
+      {/* CONSTRUCTOR DE TARJETA DE CAFÉ */}
+      <section className="section cb-section" id="arma-tu-tarjeta">
+        <div className="container">
+          <Reveal className="section-head center-head">
+            <span className="eyebrow"><Coffee size={14} /> Ejemplo: cafetería</span>
+            <h2>Armá tu tarjeta <span className="gradient-text">en 10 segundos</span></h2>
+            <p className="muted">Sumá cafés hasta completarla y probá distintos premios: café gratis, 2x1, 25% OFF y más. Vos decidís cuánto regalar.</p>
+          </Reveal>
+          <Reveal><CoffeeBuilder /></Reveal>
         </div>
       </section>
 

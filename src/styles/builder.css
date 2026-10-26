@@ -1,0 +1,118 @@
+/* =============================================================================
+   Constructor "Armá tu tarjeta de café"
+   ============================================================================= */
+.cb-section { padding-top: 20px; }
+.cb {
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 1fr 1.05fr 1fr; gap: 22px; align-items: start;
+  padding: clamp(16px, 2.6vw, 30px); border-radius: 30px;
+  background:
+    radial-gradient(700px 360px at 50% 0%, rgba(245,185,113,.16), transparent 70%),
+    radial-gradient(500px 300px at 100% 100%, rgba(139,92,246,.14), transparent 70%),
+    var(--panel);
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 30px 80px rgba(0,0,0,.45);
+}
+@media (max-width: 1000px) { .cb { grid-template-columns: 1fr 1fr; } .cb-center { grid-column: 1 / -1; order: -1; } }
+@media (max-width: 640px) { .cb { grid-template-columns: 1fr; } }
+.cb-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.cb-center { align-items: center; }
+.cb-step { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: .95rem; }
+.cb-step span { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: .8rem; color: #0b0b0d; background: var(--grad); flex: none; }
+
+/* Menú */
+.cb-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cb-item {
+  position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  padding: 12px; border-radius: 16px; text-align: left; cursor: pointer; color: var(--text);
+  background: rgba(255,255,255,.035); border: 1px solid var(--line-strong);
+  font: inherit; transition: transform .12s, border-color .2s, background .2s;
+}
+.cb-item:hover:not(:disabled) { border-color: #f5b971; background: rgba(245,185,113,.09); transform: translateY(-2px); }
+.cb-item:active:not(:disabled) { transform: scale(.95); }
+.cb-item:disabled { opacity: .45; cursor: not-allowed; }
+.cb-item-emoji { font-size: 1.6rem; line-height: 1; margin-bottom: 4px; transition: transform .2s; }
+.cb-item:hover:not(:disabled) .cb-item-emoji { transform: rotate(-12deg) scale(1.15); }
+.cb-item-name { font-weight: 600; font-size: .9rem; }
+.cb-item-price { color: var(--subtle); font-size: .8rem; }
+.cb-item-plus { position: absolute; top: 10px; right: 10px; font-size: .72rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; background: var(--lime-dim); color: var(--lime); opacity: 0; transition: opacity .2s; }
+.cb-item:hover:not(:disabled) .cb-item-plus { opacity: 1; }
+
+.cb-ticket { padding: 12px 14px; border-radius: 16px; background: #0d0e11; border: 1px dashed var(--line-strong); display: flex; flex-direction: column; gap: 8px; }
+.cb-ticket-list { display: flex; flex-direction: column; gap: 3px; min-height: 84px; }
+.cb-ticket-line { font-size: .86rem; animation: feed-in .3s ease-out; }
+
+/* Tarjeta */
+.cb-card {
+  width: 100%; max-width: 400px; border-radius: 24px; padding: 20px; color: #fff6ec;
+  background: linear-gradient(150deg, #4a2c19 0%, #2a170c 70%);
+  box-shadow: 0 24px 50px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12);
+  display: flex; flex-direction: column; gap: 16px; position: relative; overflow: hidden;
+  transition: box-shadow .4s, transform .4s;
+}
+.cb-card::before { content: ""; position: absolute; width: 260px; height: 260px; right: -90px; top: -110px; border-radius: 50%; background: radial-gradient(circle, rgba(245,185,113,.35), transparent 65%); }
+.cb-card.done { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 3px var(--rw), 0 0 50px color-mix(in srgb, var(--rw) 45%, transparent); animation: card-celebrate .6s ease-out; }
+@keyframes card-celebrate { 30% { transform: scale(1.04) rotate(-1deg); } 60% { transform: scale(.99) rotate(.6deg); } }
+.cb-card-head { display: flex; align-items: center; gap: 12px; position: relative; }
+.cb-logo { width: 46px; height: 46px; border-radius: 14px; background: #f5b971; display: grid; place-items: center; font-size: 1.5rem; box-shadow: 0 6px 14px rgba(0,0,0,.3); }
+.cb-merchant { font-size: .72rem; letter-spacing: .14em; opacity: .7; font-weight: 700; }
+.cb-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; }
+.cb-badge { padding: 6px 10px; border-radius: 10px; font-weight: 800; font-size: .82rem; color: #0b0b0d; background: var(--rw); transition: background .3s; white-space: nowrap; animation: pop .35s ease-out; }
+.cb-stamps { display: grid; gap: 10px; position: relative; }
+.cb-stamp {
+  aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-size: 1.35rem;
+  border: 2px dashed rgba(245,185,113,.45); color: rgba(255,246,236,.45); font-weight: 700;
+  transition: background .25s, border-color .25s;
+}
+.cb-stamp span { font-size: .75rem; }
+.cb-stamp.on { background: #f5b971; border: 2px solid #f5b971; box-shadow: inset 0 -3px 0 rgba(0,0,0,.18); }
+.cb-stamp.new { animation: stamp-in .45s cubic-bezier(.2,1.4,.4,1); }
+@keyframes stamp-in { 0% { transform: scale(.2) rotate(-40deg); opacity: 0; } 60% { transform: scale(1.25) rotate(8deg); } }
+.cb-stamp.last:not(.on) { border-color: var(--rw); border-style: solid; background: color-mix(in srgb, var(--rw) 18%, transparent); animation: glow-pulse 1.8s ease-in-out infinite; }
+.cb-card-foot { display: flex; justify-content: space-between; font-size: .9rem; opacity: .9; }
+.cb-progress { background: rgba(255,255,255,.12); }
+
+/* Cupón */
+.cb-coupon {
+  width: 100%; max-width: 400px; display: flex; align-items: stretch; border-radius: 18px; overflow: hidden;
+  background: #fff; color: #0b0b0d; box-shadow: 0 16px 40px rgba(0,0,0,.4);
+  animation: coupon-in .55s cubic-bezier(.2,1.2,.4,1);
+}
+@keyframes coupon-in { from { opacity: 0; transform: translateY(-24px) scale(.9); } }
+.cb-coupon.used { filter: grayscale(.6); opacity: .85; }
+.cb-coupon-left { display: grid; place-items: center; width: 74px; font-size: 2rem; background: var(--rw); border-right: 3px dashed #fff; flex: none; }
+.cb-coupon-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.cb-coupon-k { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; color: #6b7079; }
+.cb-coupon-t { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; line-height: 1.1; }
+.cb-coupon-code { color: #6b7079; }
+.cb-redeem { align-self: center; margin-right: 12px; display: inline-flex; gap: 6px; align-items: center; padding: 10px 14px; border-radius: 12px; border: 0; cursor: pointer; font: 700 .9rem var(--font); color: #fff; background: #0b0b0d; transition: transform .12s; white-space: nowrap; }
+.cb-redeem:hover { transform: scale(1.05); }
+.cb-redeem.alt { background: #e9ebef; color: #0b0b0d; }
+
+/* Premios */
+.cb-rewards { display: flex; flex-direction: column; gap: 8px; }
+.cb-reward {
+  display: flex; gap: 12px; align-items: center; text-align: left; padding: 11px 13px; border-radius: 16px; cursor: pointer;
+  background: rgba(255,255,255,.035); border: 1.5px solid var(--line-strong); color: var(--text); font: inherit;
+  transition: border-color .2s, background .2s, transform .12s;
+}
+.cb-reward:hover { transform: translateX(3px); border-color: var(--rw); }
+.cb-reward[aria-pressed="true"] { border-color: var(--rw); background: color-mix(in srgb, var(--rw) 14%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--rw) 18%, transparent); }
+.cb-reward strong { display: block; }
+.cb-reward-emoji { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 1.25rem; background: color-mix(in srgb, var(--rw) 22%, transparent); flex: none; }
+.cb-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; border-radius: 14px; background: #0d0e11; border: 1px solid var(--line); }
+.cb-seg button { padding: 10px 6px; border-radius: 10px; border: 0; background: transparent; color: var(--muted); font: 700 .88rem var(--font); cursor: pointer; transition: all .2s; }
+.cb-seg button[aria-checked="true"] { background: var(--lime); color: #0b0b0d; }
+.cb-insight { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 16px; background: var(--grad-soft), #0d0e11; border: 1px solid rgba(183,240,0,.25); }
+.cb-insight > svg { color: var(--lime); flex: none; margin-top: 2px; }
+
+/* Celular: menú en fila deslizable, pegado a la tarjeta para ver cada sello al tocar */
+@media (max-width: 640px) {
+  .cb-menu { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 6px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .cb-menu::-webkit-scrollbar { display: none; }
+  .cb-item { flex: 0 0 128px; scroll-snap-align: start; }
+  .cb-item-plus { opacity: 1; }
+  .cb-ticket-list { min-height: 0; }
+  .cb-card { padding: 16px; }
+  .cb-stamps { gap: 8px; }
+}
