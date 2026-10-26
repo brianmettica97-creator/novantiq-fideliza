@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart3, Building2, Check, Gift, ShieldCheck, Smartphone, Sparkles, Store, Users, Zap } from 'lucide-react';
+import { ArrowRight, BarChart3, Building2, Check, Gift, MousePointerClick, QrCode, ShieldCheck, Smartphone, Sparkles, Store, Users, Zap } from 'lucide-react';
 import { LoyaltyCard } from '../../components/LoyaltyCard';
+import { InteractiveDemo } from '../../components/InteractiveDemo';
+import { RoiCalculator } from '../../components/RoiCalculator';
+import { CountUp, Reveal, RotatingWord, Tilt } from '../../components/Motion';
 import { Alert, Button, Input, Textarea } from '../../components/ui';
 import { errorMessage, q, rpc } from '../../lib/api';
 import { CATEGORIES } from '../../lib/constants';
@@ -18,10 +21,10 @@ const FALLBACK_PLANS: Plan[] = [
   { id: 'multisucursal', name: 'Multisucursal', description: 'Cadenas y comercios con varios locales.', price_ars: 59900, max_branches: 20, max_staff: 60, max_programs: 20, max_cards: null, features: { points: true, milestones: true, promotions: true, export: true }, sort_order: 3, is_public: true, active: true },
 ];
 
-const EXAMPLES = [
-  { type: 'stamps' as const, name: 'Café Frecuente', merchantName: 'Ejemplo · Cafetería', bgColor: '#3B2416', textColor: '#FFF6EC', accentColor: '#E8B77D', stampIcon: 'coffee', stampsRequired: 8, balance: 5, rewardName: 'Café gratis' },
-  { type: 'visits' as const, name: 'Barber Pass', merchantName: 'Ejemplo · Barbería', bgColor: '#17191D', textColor: '#FFFFFF', accentColor: '#B7F000', stampIcon: 'scissors', stampsRequired: 6, balance: 4, rewardName: 'Corte gratis' },
-  { type: 'points' as const, name: 'Club Burger', merchantName: 'Ejemplo · Hamburguesería', bgColor: '#FF6B4A', textColor: '#1A0B06', accentColor: '#FFFFFF', stampIcon: 'burger', stampsRequired: null, balance: 1240, rewardName: 'Combo doble' },
+const HERO_CARDS = [
+  { type: 'stamps' as const, name: 'Café Frecuente', merchantName: 'Café Aroma', bgColor: '#3B2416', textColor: '#FFF6EC', accentColor: '#F5B971', stampIcon: 'coffee', stampsRequired: 8, balance: 6, rewardName: 'Café grande gratis', code: 'K7Q9M2XP' },
+  { type: 'visits' as const, name: 'Barber Pass', merchantName: 'Barbería Norte', bgColor: '#0E0E12', textColor: '#FFFFFF', accentColor: '#B7F000', stampIcon: 'scissors', stampsRequired: 6, balance: 4, rewardName: 'Corte gratis' },
+  { type: 'points' as const, name: 'Burger Points', merchantName: 'Gor Burger', bgColor: '#FF5A36', textColor: '#1A0B06', accentColor: '#FFF3B0', stampIcon: 'burger', stampsRequired: null, balance: 1240, rewardName: 'Combo doble' },
 ];
 
 const FAQ = [
@@ -39,99 +42,170 @@ export function LandingPage() {
   const list = plans?.length ? plans : FALLBACK_PLANS;
   return (
     <>
-      <section className="hero">
+      {/* HERO */}
+      <section className="hero hero-v2">
+        <div className="hero-aurora" aria-hidden><span className="blob b1" /><span className="blob b2" /><span className="blob b3" /></div>
+        <div className="hero-grid-bg" aria-hidden />
         <div className="container hero-grid">
-          <div>
-            <span className="eyebrow"><Sparkles size={14} /> Fidelización digital para comercios</span>
-            <h1>Hacé que tus clientes <span className="lime">vuelvan</span>.</h1>
-            <p className="muted" style={{ fontSize: '1.15rem', maxWidth: 540 }}>Tarjetas de sellos, visitas y puntos en el celular de tus clientes. Sin apps, sin papel y sin trampas. Configuralo en minutos.</p>
+          <div className="hero-copy">
+            <span className="eyebrow pulse"><Sparkles size={14} /> Nuevo · Fidelización digital sin apps</span>
+            <h1>Hacé que vuelvan<br />a tu <RotatingWord words={['cafetería', 'barbería', 'hamburguesería', 'heladería', 'gimnasio', 'pet shop', 'lavadero', 'local']} /></h1>
+            <p className="hero-sub">Tarjetas de sellos, visitas y puntos en el celular de tus clientes. Se suman con un QR, vos premiás la fidelidad y ellos <strong>vuelven más seguido</strong>.</p>
             <div className="row mt-2">
-              <Link to="/registro" className="btn btn-primary btn-lg">Probar 14 días gratis</Link>
-              <a href="#como-funciona" className="btn btn-lg">Cómo funciona</a>
+              <Link to="/registro" className="btn btn-primary btn-lg btn-glow">Probar 14 días gratis <ArrowRight size={18} /></Link>
+              <a href="#demo" className="btn btn-lg btn-outline-glow"><MousePointerClick size={18} /> Probá la demo</a>
             </div>
-            <p className="small subtle mt-2">Sin tarjeta de crédito · Cancelás cuando quieras</p>
+            <div className="hero-trust">
+              <span><Check size={14} /> Sin tarjeta de crédito</span>
+              <span><Check size={14} /> Listo en 10 minutos</span>
+              <span><Check size={14} /> Cancelás cuando quieras</span>
+            </div>
           </div>
-          <div className="stack" style={{ alignItems: 'center' }}>
-            <LoyaltyCard look={{ ...EXAMPLES[0], code: 'K7Q9M2XP' }} />
+          <div className="hero-cards" aria-hidden>
+            {HERO_CARDS.map((c, i) => (
+              <div key={c.name} className={`hero-card hc${i + 1}`}>
+                <Tilt max={16}><LoyaltyCard compact look={c} /></Tilt>
+              </div>
+            ))}
+            <div className="floating-chip chip-a"><Gift size={14} /> ¡Premio desbloqueado!</div>
+            <div className="floating-chip chip-b"><QrCode size={14} /> +1 sello</div>
           </div>
         </div>
       </section>
 
+      {/* MARQUEE DE RUBROS */}
+      <div className="marquee" aria-label="Rubros compatibles">
+        <div className="marquee-track">
+          {[...CATEGORIES, ...CATEGORIES].filter((c) => c.id !== 'otro').map((c, i) => <span key={i} className="marquee-item"><Store size={16} />{c.label}</span>)}
+        </div>
+      </div>
+
+      {/* NÚMEROS */}
+      <section className="container stats-strip">
+        {[
+          [<CountUp to={30} suffix=" s" />, 'renovación del QR antifraude'],
+          [<CountUp to={0} />, 'apps para descargar'],
+          [<CountUp to={6} />, 'pasos para lanzar tu tarjeta'],
+          [<CountUp to={14} suffix=" días" />, 'de prueba gratis'],
+        ].map(([n, l], i) => <Reveal key={i} delay={i * 90} className="stat-pill"><span className="stat-pill-n gradient-text">{n}</span><span className="muted small">{l}</span></Reveal>)}
+      </section>
+
+      {/* DEMO INTERACTIVA */}
+      <section className="section" id="demo">
+        <div className="container">
+          <Reveal className="section-head center-head">
+            <span className="eyebrow"><MousePointerClick size={14} /> Demo en vivo</span>
+            <h2>Probalo ahora: <span className="gradient-text">sos el empleado</span></h2>
+            <p className="muted">Elegí un rubro, sumá sellos como lo haría tu equipo y mirá cómo se llena la tarjeta del cliente. Completala y canjeá el premio.</p>
+          </Reveal>
+          <Reveal><InteractiveDemo /></Reveal>
+        </div>
+      </section>
+
+      {/* CÓMO FUNCIONA */}
       <section className="section section-alt" id="como-funciona">
         <div className="container">
-          <div className="section-head"><h2>Cómo funciona</h2><p className="muted">Tres pasos, sin instalar nada.</p></div>
-          <div className="grid-3">
+          <Reveal className="section-head"><h2>Cómo funciona</h2><p className="muted">Tres pasos, sin instalar nada.</p></Reveal>
+          <div className="grid-3 steps-flow">
             {[
-              ['Creás tu tarjeta', 'Elegís sellos, visitas o puntos, definís el premio y la personalizás con tu logo y colores.'],
-              ['Tus clientes se suman', 'Escanean el QR del mostrador desde su celular y obtienen su tarjeta digital en un minuto.'],
-              ['Tu equipo registra cada compra', 'Escanean el QR del cliente y suman con un toque. Al completar la tarjeta, canjean el premio.'],
-            ].map(([t, d], i) => <div key={t} className="card"><div className="step-num">{i + 1}</div><h3>{t}</h3><p className="muted mb-0">{d}</p></div>)}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head"><h2>Beneficios</h2><p className="muted">Todo lo que necesitás para aumentar la frecuencia de compra.</p></div>
-          <div className="grid-3">
-            {[
-              [Smartphone, 'Sin apps', 'Funciona en cualquier celular Android o iPhone, desde el navegador.'],
-              [ShieldCheck, 'A prueba de trampas', 'QR que cambia cada 30 segundos, límites por día y registro de quién hizo cada operación.'],
-              [BarChart3, 'Estadísticas claras', 'Clientes activos, recurrentes, canjes y rendimiento por sucursal y empleado.'],
-              [Users, 'Tu equipo, con permisos', 'Roles para titular, administrador, encargado y empleado. Cada uno ve lo que necesita.'],
-              [Building2, 'Varias sucursales', 'Elegí en qué locales participa cada tarjeta y quién opera en cada uno.'],
-              [Zap, 'Listo en minutos', 'Asistente guiado, afiche para imprimir y textos para redes incluidos.'],
-            ].map(([Icon, t, d]: any) => <div key={t} className="card"><div className="feature-icon"><Icon size={22} /></div><h3>{t}</h3><p className="muted mb-0">{d}</p></div>)}
-          </div>
-        </div>
-      </section>
-
-      <section className="section section-alt">
-        <div className="container">
-          <div className="section-head"><h2>Para todo tipo de comercio</h2><p className="muted">Sellos para gastronomía, visitas para servicios y puntos para compras de distinto importe.</p></div>
-          <div className="chip-cloud">{CATEGORIES.filter((c) => c.id !== 'otro').map((c) => <span key={c.id} className="chip"><Store size={14} color="var(--lime)" />{c.label}</span>)}</div>
-          <h3 className="mt-3">Ejemplos de tarjetas</h3>
-          <p className="small subtle">Diseños ilustrativos. Cada comercio usa su propio nombre, logo y colores.</p>
-          <div className="grid-3">{EXAMPLES.map((e) => <LoyaltyCard key={e.name} look={e} />)}</div>
-        </div>
-      </section>
-
-      <section className="section" id="precios">
-        <div className="container">
-          <div className="section-head"><h2>Planes y precios</h2><p className="muted">Precios mensuales en pesos argentinos. 14 días de prueba gratis en cualquier plan.</p></div>
-          <div className="grid-3">
-            {list.map((p, i) => (
-              <div key={p.id} className={`card stack ${i === 1 ? 'card-accent' : ''}`}>
-                {i === 1 && <span className="badge badge-lime" style={{ alignSelf: 'flex-start' }}>Más elegido</span>}
-                <div><h3 className="mb-0">{p.name}</h3><span className="small muted">{p.description}</span></div>
-                <div className="price">{fmtMoney(p.price_ars)}<small> /mes</small></div>
-                <PlanFeatures plan={p} />
-                <Link to="/registro" className={`btn ${i === 1 ? 'btn-primary' : ''}`} style={{ marginTop: 'auto' }}>Empezar gratis</Link>
-              </div>
+              [Sparkles, 'Creás tu tarjeta', 'Elegís sellos, visitas o puntos, definís el premio y la personalizás con tu logo y colores.'],
+              [QrCode, 'Tus clientes se suman', 'Escanean el QR del mostrador desde su celular y obtienen su tarjeta digital en un minuto.'],
+              [Gift, 'Sumás y premiás', 'Tu equipo escanea el QR del cliente y suma con un toque. Al completar la tarjeta, canjean el premio.'],
+            ].map(([Icon, t, d]: any, i) => (
+              <Reveal key={t} delay={i * 120} className="card glow-card step-card">
+                <div className="step-num">{i + 1}</div>
+                <div className="feature-icon"><Icon size={22} /></div>
+                <h3>{t}</h3><p className="muted mb-0">{d}</p>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
+      {/* BENEFICIOS */}
+      <section className="section">
+        <div className="container">
+          <Reveal className="section-head"><h2>Todo lo que necesitás para que <span className="gradient-text">vuelvan más seguido</span></h2></Reveal>
+          <div className="grid-3">
+            {[
+              [Smartphone, 'Sin apps', 'Funciona en cualquier celular Android o iPhone, desde el navegador.', '#B7F000'],
+              [ShieldCheck, 'A prueba de trampas', 'QR que cambia cada 30 segundos, límites por día y registro de quién hizo cada operación.', '#22D3EE'],
+              [BarChart3, 'Estadísticas claras', 'Clientes activos, recurrentes, canjes y rendimiento por sucursal y empleado.', '#A78BFA'],
+              [Users, 'Tu equipo, con permisos', 'Roles para titular, administrador, encargado y empleado. Cada uno ve lo que necesita.', '#FF4D8D'],
+              [Building2, 'Varias sucursales', 'Elegí en qué locales participa cada tarjeta y quién opera en cada uno.', '#FFC83D'],
+              [Zap, 'Listo en minutos', 'Asistente guiado, afiche para imprimir y textos para redes incluidos.', '#B7F000'],
+            ].map(([Icon, t, d, c]: any, i) => (
+              <Reveal key={t} delay={(i % 3) * 100} className="card glow-card feature-card">
+                <div className="feature-icon" style={{ background: `${c}22`, color: c }}><Icon size={22} /></div>
+                <h3>{t}</h3><p className="muted mb-0">{d}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CALCULADORA */}
+      <section className="section section-alt" id="calculadora">
+        <div className="container">
+          <Reveal className="section-head"><span className="eyebrow">Calculadora</span><h2>¿Cuánto más podrías vender?</h2><p className="muted">Mové los controles con los números de tu negocio.</p></Reveal>
+          <Reveal><RoiCalculator planPrice={list[1]?.price_ars ?? 29900} /></Reveal>
+        </div>
+      </section>
+
+      {/* PRECIOS */}
+      <section className="section" id="precios">
+        <div className="container">
+          <Reveal className="section-head center-head"><h2>Planes simples, <span className="gradient-text">sin sorpresas</span></h2><p className="muted">Precios mensuales en pesos argentinos. 14 días de prueba gratis en cualquier plan.</p></Reveal>
+          <div className="grid-3 pricing">
+            {list.map((p, i) => (
+              <Reveal key={p.id} delay={i * 100} className={`card stack price-card ${i === 1 ? 'featured' : ''}`}>
+                {i === 1 && <span className="badge badge-lime" style={{ alignSelf: 'flex-start' }}>⭐ Más elegido</span>}
+                <div><h3 className="mb-0">{p.name}</h3><span className="small muted">{p.description}</span></div>
+                <div className="price">{fmtMoney(p.price_ars)}<small> /mes</small></div>
+                <PlanFeatures plan={p} />
+                <Link to="/registro" className={`btn ${i === 1 ? 'btn-primary btn-glow' : ''}`} style={{ marginTop: 'auto' }}>Empezar gratis</Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
       <section className="section section-alt" id="preguntas">
         <div className="container narrow" style={{ maxWidth: 780 }}>
-          <div className="section-head"><h2>Preguntas frecuentes</h2></div>
+          <Reveal className="section-head"><h2>Preguntas frecuentes</h2></Reveal>
           <div className="stack-sm">{FAQ.map(([qq, a]) => <details key={qq} className="faq"><summary>{qq}</summary><p>{a}</p></details>)}</div>
         </div>
       </section>
 
+      {/* CTA FINAL */}
+      <section className="section">
+        <div className="container">
+          <Reveal className="cta-band">
+            <div>
+              <h2 className="mb-1">Tu próxima clienta fiel está a un QR de distancia.</h2>
+              <p className="mb-0">Creá tu tarjeta hoy y empezá a premiar a los que vuelven.</p>
+            </div>
+            <Link to="/registro" className="btn btn-lg btn-dark">Crear mi tarjeta gratis <ArrowRight size={18} /></Link>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* CONTACTO */}
       <section className="section" id="contacto">
         <div className="container grid-2" style={{ alignItems: 'start' }}>
-          <div>
+          <Reveal>
             <h2>Hablemos</h2>
             <p className="muted">¿Tenés una cadena, una franquicia o necesitás algo especial? Contanos y te contactamos.</p>
             <ul className="check-list mt-2">
               <li><Check size={16} />Demostración personalizada</li><li><Check size={16} />Ayuda con la configuración inicial</li><li><Check size={16} />Planes a medida para varias sucursales</li>
             </ul>
-          </div>
-          <ContactForm />
+          </Reveal>
+          <Reveal delay={120}><ContactForm /></Reveal>
         </div>
       </section>
+
+      <Link to="/registro" className="sticky-cta">Probar gratis <ArrowRight size={16} /></Link>
     </>
   );
 }
@@ -143,9 +217,10 @@ function ContactForm() {
   const [error, setError] = useState<string | null>(null);
   if (done) return <Alert kind="ok">¡Gracias! Te responderemos a la brevedad.</Alert>;
   return (
-    <form className="card stack" onSubmit={async (e) => {
+    <form className="card stack glow-card" onSubmit={async (e) => {
       e.preventDefault();
       if (f.website) return setDone(true); // trampa para bots (campo oculto)
+      if (!isConfigured) return setError('El formulario se habilita al conectar la base de datos.');
       setBusy(true); setError(null);
       try { await rpc('submit_contact_request', { p_name: f.name, p_email: f.email, p_business: f.business, p_phone: f.phone, p_message: f.message }); setDone(true); }
       catch (err) { setError(errorMessage(err)); } finally { setBusy(false); }
