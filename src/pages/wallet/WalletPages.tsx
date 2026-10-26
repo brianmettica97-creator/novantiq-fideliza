@@ -247,7 +247,7 @@ function Account() {
         <Button variant="ghost" onClick={() => setDel(false)}>Cancelar</Button>
         <Button variant="danger" disabled={confirmText !== 'ELIMINAR'} loading={busy} onClick={async () => {
           setBusy(true);
-          try { await callFunction('delete-account', { confirm: 'ELIMINAR' }); await signOut(); window.location.href = '/'; }
+          try { await callFunction('delete-account', { confirm: 'ELIMINAR' }); await signOut(); window.location.href = import.meta.env.BASE_URL; }
           catch (e) { toast.err(errorMessage(e)); setBusy(false); }
         }}>Eliminar definitivamente</Button></>}>
         <Alert kind="err">Se borrarán tu perfil, tus tarjetas y su historial. No se puede deshacer.</Alert>

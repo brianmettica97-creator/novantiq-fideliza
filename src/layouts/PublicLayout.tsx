@@ -10,11 +10,11 @@ export function PublicLayout() {
         <div className="container topbar-inner">
           <BrandLogo />
           <nav className="nav-links" aria-label="Principal">
-            <a href="/#disenos" className="hide-mobile">Diseños</a>
-            <a href="/#arma-tu-tarjeta" className="hide-mobile">Probalo</a>
-            <a href="/#como-funciona" className="hide-mobile">Cómo funciona</a>
-            <a href="/#precios" className="hide-mobile">Precios</a>
-            <a href="/#preguntas" className="hide-mobile">Preguntas</a>
+            <a href={`${import.meta.env.BASE_URL}#disenos`} className="hide-mobile">Diseños</a>
+            <a href={`${import.meta.env.BASE_URL}#arma-tu-tarjeta`} className="hide-mobile">Probalo</a>
+            <a href={`${import.meta.env.BASE_URL}#como-funciona`} className="hide-mobile">Cómo funciona</a>
+            <a href={`${import.meta.env.BASE_URL}#precios`} className="hide-mobile">Precios</a>
+            <a href={`${import.meta.env.BASE_URL}#preguntas`} className="hide-mobile">Preguntas</a>
             {user ? (
               <Link to="/inicio" className="btn btn-primary btn-sm">Mi cuenta</Link>
             ) : (
@@ -36,7 +36,7 @@ export function PublicLayout() {
           <nav className="row" aria-label="Legal">
             <Link to="/terminos">Términos y condiciones</Link>
             <Link to="/privacidad">Política de privacidad</Link>
-            <a href="/#contacto">Contacto</a>
+            <a href={`${import.meta.env.BASE_URL}#contacto`}>Contacto</a>
           </nav>
         </div>
         <div className="container mt-2 small subtle">© {new Date().getFullYear()} NOVANTIQ. Todos los derechos reservados.</div>

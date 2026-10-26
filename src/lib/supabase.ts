@@ -9,7 +9,7 @@ export const supabase: SupabaseClient = createClient(url || 'http://localhost:54
   auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
 });
 
-export const SITE_URL = ((import.meta.env.VITE_SITE_URL as string | undefined) || window.location.origin).replace(/\/$/, '');
+export const SITE_URL = ((import.meta.env.VITE_SITE_URL as string | undefined) || window.location.origin + import.meta.env.BASE_URL).replace(/\/$/, '');
 export const TURNSTILE_SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) || '';
 
 export const BRAND_BUCKET = 'brand-assets';

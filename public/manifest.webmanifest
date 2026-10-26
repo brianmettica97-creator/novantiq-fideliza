@@ -2,10 +2,10 @@
   "name": "NOVANTIQ Fideliza",
   "short_name": "Fideliza",
   "description": "Tus tarjetas de fidelización en el celular.",
-  "start_url": "/inicio",
+  "start_url": "./inicio",
   "display": "standalone",
   "background_color": "#0B0B0D",
   "theme_color": "#0B0B0D",
   "lang": "es-AR",
-  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
 }
