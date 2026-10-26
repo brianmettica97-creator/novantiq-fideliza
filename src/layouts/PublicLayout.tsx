@@ -10,6 +10,7 @@ export function PublicLayout() {
         <div className="container topbar-inner">
           <BrandLogo />
           <nav className="nav-links" aria-label="Principal">
+            <a href="/#disenos" className="hide-mobile">Diseños</a>
             <a href="/#arma-tu-tarjeta" className="hide-mobile">Probalo</a>
             <a href="/#como-funciona" className="hide-mobile">Cómo funciona</a>
             <a href="/#precios" className="hide-mobile">Precios</a>

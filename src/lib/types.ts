@@ -69,6 +69,7 @@ export interface Program {
   accent_color: string;
   logo_url: string | null;
   stamp_icon: string;
+  theme: string;
   starts_at: string | null;
   ends_at: string | null;
   all_branches: boolean;
@@ -146,4 +147,8 @@ export interface CardLook {
   balance: number;
   rewardName?: string;
   code?: string;
+  /** Diseño temático por rubro (ver ThemedCard). */
+  theme?: string;
+  /** Meta de puntos para dibujar el progreso. */
+  goal?: number;
 }

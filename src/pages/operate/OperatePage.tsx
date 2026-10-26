@@ -142,7 +142,7 @@ export function OperatePage() {
             </div>
             <Button size="sm" variant="ghost" onClick={reset}>Otro cliente</Button>
           </div>
-          <LoyaltyCard compact look={{ type: p.type, name: p.name, merchantName: current.name, bgColor: p.bg_color, textColor: p.text_color, accentColor: p.accent_color, stampIcon: p.stamp_icon, stampsRequired: p.stamps_required, balance: lookup.card.balance }} />
+          <LoyaltyCard compact look={{ theme: p.theme, type: p.type, name: p.name, merchantName: current.name, bgColor: p.bg_color, textColor: p.text_color, accentColor: p.accent_color, stampIcon: p.stamp_icon, stampsRequired: p.stamps_required, balance: lookup.card.balance }} />
 
           {result && (
             <div className={`result-flash ${result.ok ? 'ok' : 'err'}`} role="status">

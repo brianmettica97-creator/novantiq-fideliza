@@ -96,7 +96,7 @@ export function CustomerDetailPage() {
         </>} />
       {card.status === 'blocked' && <Alert kind="err">Tarjeta bloqueada{card.status_reason ? `: ${card.status_reason}` : ''}.</Alert>}
       <div className="grid-2" style={{ alignItems: 'start' }}>
-        <LoyaltyCard look={{ type: p.type, name: p.name, merchantName: current!.name, logoUrl: p.logo_url, bgColor: p.bg_color, textColor: p.text_color, accentColor: p.accent_color, stampIcon: p.stamp_icon, stampsRequired: p.stamps_required, balance: card.balance, code: card.code }} />
+        <LoyaltyCard look={{ theme: p.theme, type: p.type, name: p.name, merchantName: current!.name, logoUrl: p.logo_url, bgColor: p.bg_color, textColor: p.text_color, accentColor: p.accent_color, stampIcon: p.stamp_icon, stampsRequired: p.stamps_required, balance: card.balance, code: card.code }} />
         <div className="card stack-sm">
           <div className="row-between small"><span className="muted">Saldo actual</span><strong>{card.balance} {t.units}</strong></div>
           <div className="row-between small"><span className="muted">Acumulado histórico</span><strong>{card.lifetime_earned}</strong></div>

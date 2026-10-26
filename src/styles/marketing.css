@@ -70,7 +70,7 @@ body {
 
 .tilt { transform-style: preserve-3d; transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .25s ease-out; position: relative; border-radius: 22px; }
 .tilt:hover { transition: transform .06s linear; }
-.tilt .lcard { max-width: none; }
+.tilt .lcard, .tilt .tc-wrap { max-width: none; }
 .tilt-glare { position: absolute; inset: 0; border-radius: 22px; pointer-events: none; background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255,255,255,.3), transparent 45%); opacity: 0; transition: opacity .2s; }
 .tilt:hover .tilt-glare { opacity: 1; }
 

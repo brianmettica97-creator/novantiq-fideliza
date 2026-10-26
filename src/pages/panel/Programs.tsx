@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Archive, Copy, Gift, Pause, Play, Plus, Rocket, Trash2 } from 'lucide-react';
 import { LoyaltyCard, STAMP_ICON_MAP } from '../../components/LoyaltyCard';
+import { CARD_THEMES, CLASSIC_THEME, ThemedCard } from '../../components/ThemedCard';
 import { ImageUpload } from '../../components/ImageUpload';
 import { Alert, Badge, Button, Checkbox, ColorInput, ConfirmModal, Empty, ErrorBox, Input, Loading, Modal, PageHeader, Select, Tabs, Textarea } from '../../components/ui';
 import { useMerchant } from '../../context/MerchantContext';
@@ -15,18 +16,18 @@ import type { Branch, Program, ProgramType, Reward } from '../../lib/types';
 
 export type ProgramDraft = Pick<Program, 'type' | 'name' | 'description' | 'stamps_required' | 'max_units_per_tx' | 'earn_points' | 'earn_amount'
   | 'max_points_per_tx' | 'max_amount_per_tx' | 'daily_limit_per_card' | 'min_minutes_between' | 'welcome_bonus' | 'terms' | 'bg_color'
-  | 'text_color' | 'accent_color' | 'logo_url' | 'stamp_icon' | 'starts_at' | 'ends_at' | 'all_branches' | 'join_enabled'>;
+  | 'text_color' | 'accent_color' | 'logo_url' | 'stamp_icon' | 'theme' | 'starts_at' | 'ends_at' | 'all_branches' | 'join_enabled'>;
 
 export const EDITABLE_FIELDS: (keyof ProgramDraft)[] = ['name', 'description', 'stamps_required', 'max_units_per_tx', 'earn_points', 'earn_amount',
   'max_points_per_tx', 'max_amount_per_tx', 'daily_limit_per_card', 'min_minutes_between', 'welcome_bonus', 'terms', 'bg_color', 'text_color',
-  'accent_color', 'logo_url', 'stamp_icon', 'starts_at', 'ends_at', 'all_branches', 'join_enabled'];
+  'accent_color', 'logo_url', 'stamp_icon', 'theme', 'starts_at', 'ends_at', 'all_branches', 'join_enabled'];
 
 export function defaultDraft(type: ProgramType = 'stamps'): ProgramDraft {
   return {
     type, name: '', description: '', stamps_required: type === 'stamps' || type === 'visits' ? 8 : null, max_units_per_tx: 1,
     earn_points: type === 'points' ? 1 : null, earn_amount: type === 'points' ? 1000 : null, max_points_per_tx: type === 'points' ? 500 : null,
     max_amount_per_tx: null, daily_limit_per_card: type === 'visits' ? 1 : 3, min_minutes_between: 0, welcome_bonus: 0, terms: '',
-    bg_color: '#17191D', text_color: '#FFFFFF', accent_color: '#B7F000', logo_url: null, stamp_icon: 'star', starts_at: null, ends_at: null,
+    bg_color: '#17191D', text_color: '#FFFFFF', accent_color: '#B7F000', logo_url: null, stamp_icon: 'star', theme: 'classic', starts_at: null, ends_at: null,
     all_branches: true, join_enabled: true,
   };
 }
@@ -81,6 +82,9 @@ export function ProgramForm({ draft, onChange, merchantId, merchantName, rewardN
           <Checkbox label="Permitir nuevas inscripciones" checked={draft.join_enabled} onChange={(v) => set('join_enabled', v)} />
         </>}
         {section !== 'rules' && <>
+          <ThemePicker draft={draft} merchantName={merchantName} onPick={(theme) => set('theme', theme)} />
+          {draft.theme !== 'classic' && <p className="small subtle mb-0">Los diseños por rubro tienen su propia paleta y animaciones. Tu nombre, logo y premio se muestran igual. Para usar tus colores, elegí “Clásico”.</p>}
+          {draft.theme === 'classic' && <>
           <div className="field"><span className="label">Paletas sugeridas</span>
             <div className="row">{CARD_PALETTES.map((p) => (
               <button key={p.name} type="button" title={p.name} aria-label={`Paleta ${p.name}`} onClick={() => onChange({ ...draft, bg_color: p.bg, text_color: p.text, accent_color: p.accent })}
@@ -99,12 +103,13 @@ export function ProgramForm({ draft, onChange, merchantId, merchantName, rewardN
                   style={draft.stamp_icon === i ? { borderColor: 'var(--lime)', color: 'var(--lime)' } : undefined}><I size={18} /></button>); })}</div>
             </div>
           )}
+          </>}
           <ImageUpload merchantId={merchantId} folder="programs" label="Logo de la tarjeta (opcional, usa el del comercio si no subís uno)" value={draft.logo_url} onChange={(v) => set('logo_url', v)} />
         </>}
       </div>
       <div className="stack" style={{ position: 'sticky', top: 80 }}>
         <span className="label">Vista previa</span>
-        <LoyaltyCard look={{ type: draft.type, name: draft.name || 'Nombre de la tarjeta', merchantName, logoUrl: draft.logo_url, bgColor: draft.bg_color, textColor: draft.text_color, accentColor: draft.accent_color, stampIcon: draft.stamp_icon, stampsRequired: draft.stamps_required, balance: Math.min(3, (draft.stamps_required ?? 10) - 1), rewardName, code: 'ABCD1234' }} />
+        <LoyaltyCard look={{ theme: draft.theme, type: draft.type, name: draft.name || 'Nombre de la tarjeta', merchantName, logoUrl: draft.logo_url, bgColor: draft.bg_color, textColor: draft.text_color, accentColor: draft.accent_color, stampIcon: draft.stamp_icon, stampsRequired: draft.stamps_required, balance: Math.min(3, (draft.stamps_required ?? 10) - 1), rewardName, code: 'ABCD1234' }} />
       </div>
     </div>
   );
@@ -127,7 +132,7 @@ export function ProgramsPage() {
           {list.map((p) => (
             <Link key={p.id} to={`/panel/tarjetas/${p.id}`} className="card card-hover stack-sm" style={{ color: 'inherit', textDecoration: 'none' }}>
               <div className="row-between"><Badge kind={PROGRAM_STATUS[p.status].badge.replace('badge-', '') as any}>{PROGRAM_STATUS[p.status].label}</Badge><span className="small subtle">{programType(p.type).label}</span></div>
-              <LoyaltyCard compact look={{ type: p.type, name: p.name, merchantName: '', logoUrl: p.logo_url, bgColor: p.bg_color, textColor: p.text_color, accentColor: p.accent_color, stampIcon: p.stamp_icon, stampsRequired: p.stamps_required, balance: 0 }} />
+              <LoyaltyCard compact look={{ theme: p.theme, type: p.type, name: p.name, merchantName: '', logoUrl: p.logo_url, bgColor: p.bg_color, textColor: p.text_color, accentColor: p.accent_color, stampIcon: p.stamp_icon, stampsRequired: p.stamps_required, balance: 0 }} />
               <span className="small muted">Creada {fmtDate(p.created_at)} · versión {p.version}</span>
             </Link>
           ))}
@@ -311,6 +316,29 @@ function BranchesPicker({ program, branches, selected, onChange, readOnly }: { p
           toast.ok('Sucursales actualizadas.'); onChange();
         } catch (e) { toast.err(errorMessage(e)); } finally { setBusy(false); }
       }}>Guardar</Button>}
+    </div>
+  );
+}
+
+/** Galería para elegir el diseño de la tarjeta: clásico (colores propios) o temático por rubro. */
+function ThemePicker({ draft, merchantName, onPick }: { draft: ProgramDraft; merchantName: string; onPick: (theme: string) => void }) {
+  const sample = (theme: string) => ({
+    type: draft.type, theme, name: draft.name || 'Tu tarjeta', merchantName, logoUrl: draft.logo_url, bgColor: draft.bg_color,
+    textColor: draft.text_color, accentColor: draft.accent_color, stampIcon: draft.stamp_icon,
+    stampsRequired: draft.stamps_required ?? 8, goal: 100, balance: Math.ceil((draft.stamps_required ?? 8) / 2),
+  });
+  return (
+    <div className="field">
+      <span className="label">Diseño de la tarjeta</span>
+      <div className="theme-picker">
+        {[CLASSIC_THEME, ...CARD_THEMES].map((t) => (
+          <button key={t.id} type="button" className="theme-option" aria-pressed={(draft.theme ?? 'classic') === t.id} onClick={() => onPick(t.id)}>
+            {t.id === 'classic' ? <LoyaltyCard compact look={sample('classic')} /> : <ThemedCard look={sample(t.id)} />}
+            <strong className="small">{t.emoji} {t.label}</strong>
+            <small>{t.rubro}</small>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

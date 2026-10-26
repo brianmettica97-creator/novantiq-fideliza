@@ -501,12 +501,12 @@ grant select (id, merchant_id, email, full_name, role, all_branches, branch_ids,
 grant select on public.programs, public.program_versions to authenticated;
 grant insert (merchant_id, type, name, description, stamps_required, max_units_per_tx, earn_points, earn_amount,
               max_points_per_tx, max_amount_per_tx, daily_limit_per_card, min_minutes_between, welcome_bonus,
-              terms, bg_color, text_color, accent_color, logo_url, stamp_icon, starts_at, ends_at, all_branches,
+              terms, bg_color, text_color, accent_color, logo_url, stamp_icon, theme, starts_at, ends_at, all_branches,
               join_enabled)
   on public.programs to authenticated;
 grant update (name, description, stamps_required, max_units_per_tx, earn_points, earn_amount,
               max_points_per_tx, max_amount_per_tx, daily_limit_per_card, min_minutes_between, welcome_bonus,
-              terms, bg_color, text_color, accent_color, logo_url, stamp_icon, starts_at, ends_at, all_branches,
+              terms, bg_color, text_color, accent_color, logo_url, stamp_icon, theme, starts_at, ends_at, all_branches,
               join_enabled)
   on public.programs to authenticated;
 grant select, insert, delete on public.program_branches to authenticated;

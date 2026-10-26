@@ -299,3 +299,22 @@ describe('páginas públicas', () => {
     expect(await send()).toBe('rate_limited');
   });
 });
+
+describe('diseño temático de la tarjeta', () => {
+  test('se guarda, se valida y llega a la billetera del cliente y al mostrador', async () => {
+    const m = await setupMerchant(db, 'Barbería Tema');
+    await sqlAs(db, m.owner, `update public.programs set theme = 'barber' where id = $1`, [m.programId]);
+    const bad = await sqlAs(db, m.owner, `update public.programs set theme = 'inexistente' where id = $1`, [m.programId]).catch((e) => e.message);
+    expect(bad).toMatch(/check constraint/);
+    const c = await joinAsCustomer(db, m.joinCode);
+    const wallet = await rpc(db, c.customer, 'get_my_wallet');
+    expect(wallet[0].program.theme).toBe('barber');
+    const look = await rpc(db, m.owner, 'staff_lookup_card', { p_merchant: m.merchantId, p_branch: m.branchId, p_card_ref: c.code });
+    expect(look.program.theme).toBe('barber');
+    const pub = await rpc(db, null, 'get_public_program', { p_join_code: m.joinCode });
+    expect(pub.program.theme).toBe('barber');
+    const copy = await rpc(db, m.owner, 'duplicate_program', { p_program: m.programId });
+    const [dup] = await sqlAs(db, m.owner, `select theme from public.programs where id = $1`, [copy]);
+    expect(dup.theme).toBe('barber');
+  });
+});

@@ -229,6 +229,7 @@ create table public.programs (
   accent_color        text not null default '#B7F000' check (accent_color ~ '^#[0-9A-Fa-f]{6}$'),
   logo_url            text check (char_length(logo_url) <= 500),
   stamp_icon          text not null default 'star' check (stamp_icon in ('star','coffee','heart','check','scissors','paw','burger','icecream','car','dumbbell','sparkles','bread')),
+  theme               text not null default 'classic' check (theme in ('classic','cafe','barber','burger','icecream','carwash','gym','beauty','pets')),
   starts_at           timestamptz,
   ends_at             timestamptz,
   all_branches        boolean not null default true,

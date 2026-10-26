@@ -58,7 +58,7 @@ function WalletList() {
       {data?.map((c) => (
         <Link key={c.card_id} to={`/mis-tarjetas/${c.card_id}`} style={{ display: 'block' }} aria-label={`Abrir ${c.program.name}`}>
           <LoyaltyCard compact look={{
-            type: c.program.type, name: c.program.name, merchantName: c.merchant.name, logoUrl: c.program.logo_url,
+            theme: c.program.theme, type: c.program.type, name: c.program.name, merchantName: c.merchant.name, logoUrl: c.program.logo_url,
             bgColor: c.program.bg_color, textColor: c.program.text_color, accentColor: c.program.accent_color,
             stampIcon: c.program.stamp_icon, stampsRequired: c.program.stamps_required, balance: c.balance,
             rewardName: c.rewards_ready > 0 ? `${c.rewards_ready} recompensa(s) disponible(s)` : undefined,
@@ -128,7 +128,7 @@ function WalletCard() {
     <div className="stack-lg">
       <Link to="/mis-tarjetas" className="small"><ArrowLeft size={14} style={{ display: 'inline', verticalAlign: '-2px' }} /> Mis tarjetas</Link>
       <LoyaltyCard look={{
-        type: p.type, name: p.name, merchantName: m.name, logoUrl: p.logo_url, bgColor: p.bg_color, textColor: p.text_color,
+        theme: p.theme, type: p.type, name: p.name, merchantName: m.name, logoUrl: p.logo_url, bgColor: p.bg_color, textColor: p.text_color,
         accentColor: p.accent_color, stampIcon: p.stamp_icon, stampsRequired: p.stamps_required, balance: card.balance,
         rewardName: rewards[0]?.name, code: card.code,
       }} />

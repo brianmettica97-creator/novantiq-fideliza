@@ -4,6 +4,7 @@ import { ArrowRight, BarChart3, Building2, Check, Coffee, Gift, MousePointerClic
 import { LoyaltyCard } from '../../components/LoyaltyCard';
 import { InteractiveDemo } from '../../components/InteractiveDemo';
 import { CoffeeBuilder } from '../../components/CoffeeBuilder';
+import { ThemeShowcase, ThemeWall } from '../../components/ThemeShowcase';
 import { RoiCalculator } from '../../components/RoiCalculator';
 import { CountUp, Reveal, RotatingWord, Tilt } from '../../components/Motion';
 import { Alert, Button, Input, Textarea } from '../../components/ui';
@@ -23,9 +24,9 @@ const FALLBACK_PLANS: Plan[] = [
 ];
 
 const HERO_CARDS = [
-  { type: 'stamps' as const, name: 'Café Frecuente', merchantName: 'Café Aroma', bgColor: '#3B2416', textColor: '#FFF6EC', accentColor: '#F5B971', stampIcon: 'coffee', stampsRequired: 8, balance: 6, rewardName: 'Café grande gratis', code: 'K7Q9M2XP' },
-  { type: 'visits' as const, name: 'Barber Pass', merchantName: 'Barbería Norte', bgColor: '#0E0E12', textColor: '#FFFFFF', accentColor: '#B7F000', stampIcon: 'scissors', stampsRequired: 6, balance: 4, rewardName: 'Corte gratis' },
-  { type: 'points' as const, name: 'Burger Points', merchantName: 'Gor Burger', bgColor: '#FF5A36', textColor: '#1A0B06', accentColor: '#FFF3B0', stampIcon: 'burger', stampsRequired: null, balance: 1240, rewardName: 'Combo doble' },
+  { type: 'stamps' as const, theme: 'cafe', name: 'Café Frecuente', merchantName: 'Café Aroma', bgColor: '', textColor: '', accentColor: '', stampIcon: 'coffee', stampsRequired: 8, balance: 6, rewardName: 'Café grande gratis', code: 'K7Q9M2XP' },
+  { type: 'stamps' as const, theme: 'barber', name: 'Barber Pass', merchantName: 'Barbería Norte', bgColor: '', textColor: '', accentColor: '', stampIcon: 'scissors', stampsRequired: 6, balance: 4, rewardName: 'Corte gratis' },
+  { type: 'stamps' as const, theme: 'icecream', name: 'Club del Helado', merchantName: 'Heladería Polar', bgColor: '', textColor: '', accentColor: '', stampIcon: 'icecream', stampsRequired: 6, balance: 4, rewardName: '1/4 kg de regalo' },
 ];
 
 const FAQ = [
@@ -71,6 +72,19 @@ export function LandingPage() {
             <div className="floating-chip chip-a"><Gift size={14} /> ¡Premio desbloqueado!</div>
             <div className="floating-chip chip-b"><QrCode size={14} /> +1 sello</div>
           </div>
+        </div>
+      </section>
+
+      {/* DISEÑOS POR RUBRO */}
+      <section className="section" id="disenos">
+        <div className="container">
+          <Reveal className="section-head center-head">
+            <span className="eyebrow"><Sparkles size={14} /> Diseños por rubro</span>
+            <h2>Una tarjeta con <span className="gradient-text">el ADN de tu negocio</span></h2>
+            <p className="muted">Cada rubro tiene su propio diseño, su animación al sumar y su festejo al completarla. Elegí uno y tocá la tarjeta.</p>
+          </Reveal>
+          <Reveal><ThemeShowcase /></Reveal>
+          <Reveal><ThemeWall /></Reveal>
         </div>
       </section>
 

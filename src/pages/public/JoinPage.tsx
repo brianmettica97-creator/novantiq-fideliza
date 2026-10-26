@@ -48,7 +48,7 @@ export function JoinPage() {
           {m.description && <p className="muted mb-0">{m.description}</p>}
         </div>
         <div style={{ display: 'grid', placeItems: 'center' }}>
-          <LoyaltyCard look={{ type: p.type, name: p.name, merchantName: m.name, logoUrl: p.logo_url, bgColor: p.bg_color, textColor: p.text_color, accentColor: p.accent_color, stampIcon: p.stamp_icon, stampsRequired: p.stamps_required, balance: p.welcome_bonus ?? 0, rewardName: rewards[0]?.name }} />
+          <LoyaltyCard look={{ theme: p.theme, type: p.type, name: p.name, merchantName: m.name, logoUrl: p.logo_url, bgColor: p.bg_color, textColor: p.text_color, accentColor: p.accent_color, stampIcon: p.stamp_icon, stampsRequired: p.stamps_required, balance: p.welcome_bonus ?? 0, rewardName: rewards[0]?.name }} />
         </div>
         <div className="card stack-sm">
           <h3 className="mb-0">¿Cómo funciona?</h3>

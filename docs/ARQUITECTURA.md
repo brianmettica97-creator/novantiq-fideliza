@@ -94,3 +94,23 @@ Estados posibles: `trialing`, `active`, `past_due`, `paused` y `cancelled`. `mer
 Si el comercio no está operativo, se bloquean las altas de clientes, las compras y los canjes, pero se puede seguir consultando la información.
 
 Mercado Pago confirma el pago por webhook firmado (`x-signature`). La función vuelve a consultar el estado real en la API y registra cada evento en `billing_events` para garantizar la idempotencia.
+
+## Diseños de tarjeta por rubro
+
+`programs.theme` admite estos valores:
+
+| Valor | Diseño |
+|---|---|
+| `classic` | Colores e ícono propios del comercio |
+| `cafe` | Barista |
+| `barber` | Old School |
+| `burger` | Diner |
+| `icecream` | Gelato |
+| `carwash` | Splash |
+| `gym` | Power |
+| `beauty` | Glow |
+| `pets` | Huellitas |
+
+- `src/components/ThemedCard.tsx` dibuja cada diseño: su visual de progreso, la animación al sumar (`.fresh`) y el festejo al completar (`.party`).
+- Los estilos están en `src/styles/themes.css`. Se escalan con *container queries*, así que el mismo diseño se ve bien en la billetera, el mostrador, el panel y la web.
+- El asistente sugiere el diseño según el rubro del comercio (`themeForCategory`).

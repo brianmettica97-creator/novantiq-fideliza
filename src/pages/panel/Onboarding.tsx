@@ -12,6 +12,7 @@ import { supabase } from '../../lib/supabase';
 import type { Merchant, Program, ProgramType, Reward } from '../../lib/types';
 import { defaultDraft, EDITABLE_FIELDS, ProgramForm, validateDraft, type ProgramDraft } from './Programs';
 import { SharePanel } from './Share';
+import { themeForCategory } from '../../components/ThemedCard';
 
 const STEPS = ['Tu negocio', 'Tipo de programa', 'Recompensa', 'Diseño', 'Publicar', 'Compartir'];
 
@@ -43,7 +44,7 @@ export function OnboardingPage() {
         }
       } else {
         const pre = presetFor(m.category);
-        setDraft({ ...defaultDraft(pre.type), name: pre.program, stamps_required: pre.stamps, stamp_icon: pre.icon, accent_color: m.brand_color, logo_url: null });
+        setDraft({ ...defaultDraft(pre.type), name: pre.program, stamps_required: pre.stamps, stamp_icon: pre.icon, theme: themeForCategory(m.category), accent_color: m.brand_color, logo_url: null });
         setReward((r) => ({ ...r, name: pre.reward, cost: pre.stamps }));
       }
     })().catch((e) => toast.err(errorMessage(e)));
@@ -125,7 +126,7 @@ export function OnboardingPage() {
             return (
               <button key={pt.id} className="choice" aria-pressed={draft.type === pt.id} disabled={!!locked} onClick={() => {
                 const pre = presetFor(merchant.category);
-                setDraft({ ...defaultDraft(pt.id as ProgramType), name: draft.name || pre.program, stamp_icon: draft.stamp_icon, bg_color: draft.bg_color, text_color: draft.text_color, accent_color: draft.accent_color, stamps_required: pt.id === 'stamps' || pt.id === 'visits' ? (draft.stamps_required ?? pre.stamps) : null });
+                setDraft({ ...defaultDraft(pt.id as ProgramType), name: draft.name || pre.program, stamp_icon: draft.stamp_icon, theme: draft.theme, bg_color: draft.bg_color, text_color: draft.text_color, accent_color: draft.accent_color, stamps_required: pt.id === 'stamps' || pt.id === 'visits' ? (draft.stamps_required ?? pre.stamps) : null });
                 setReward({ ...reward, cost: pt.id === 'points' ? 100 : pt.id === 'milestones' ? 5 : reward.cost });
               }}>
                 <div className="choice-icon">{draft.type === pt.id ? <Check size={20} /> : null}</div>
@@ -159,7 +160,7 @@ export function OnboardingPage() {
           <ProgramForm draft={draft} onChange={setDraft} merchantId={merchant.id} merchantName={merchant.name} rewardName={reward.name} section="design" />
           <div className="row"><Button variant="ghost" onClick={() => setStep(3)}>Atrás</Button>
             <Button variant="primary" loading={busy} onClick={() => run(async () => {
-              const patch = { bg_color: draft.bg_color, text_color: draft.text_color, accent_color: draft.accent_color, stamp_icon: draft.stamp_icon, logo_url: draft.logo_url };
+              const patch = { bg_color: draft.bg_color, text_color: draft.text_color, accent_color: draft.accent_color, stamp_icon: draft.stamp_icon, theme: draft.theme, logo_url: draft.logo_url };
               const [p] = await q<Program[]>(supabase.from('programs').update(patch).eq('id', program!.id).select());
               setProgram(p);
               await persistStep(5);
@@ -170,7 +171,7 @@ export function OnboardingPage() {
       {step === 5 && program && (
         <div className="card stack" style={{ alignItems: 'center', textAlign: 'center' }}>
           <h2>Así la verán tus clientes</h2>
-          <LoyaltyCard look={{ type: draft.type, name: draft.name, merchantName: merchant.name, logoUrl: draft.logo_url ?? merchant.logo_url, bgColor: draft.bg_color, textColor: draft.text_color, accentColor: draft.accent_color, stampIcon: draft.stamp_icon, stampsRequired: draft.stamps_required, balance: 0, rewardName: reward.name, code: 'ABCD1234' }} />
+          <LoyaltyCard look={{ theme: draft.theme, type: draft.type, name: draft.name, merchantName: merchant.name, logoUrl: draft.logo_url ?? merchant.logo_url, bgColor: draft.bg_color, textColor: draft.text_color, accentColor: draft.accent_color, stampIcon: draft.stamp_icon, stampsRequired: draft.stamps_required, balance: 0, rewardName: reward.name, code: 'ABCD1234' }} />
           <p className="muted" style={{ maxWidth: 520 }}>Al publicarla, tus clientes podrán sumarse con un QR o un enlace. Tu equipo registrará cada compra desde el mostrador.</p>
           <div className="row"><Button variant="ghost" onClick={() => setStep(4)}>Atrás</Button>
             <Button variant="primary" size="lg" loading={busy} onClick={() => run(async () => {

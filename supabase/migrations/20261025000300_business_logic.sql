@@ -324,11 +324,11 @@ begin
   end if;
   insert into public.programs (merchant_id, type, name, description, stamps_required, max_units_per_tx, earn_points,
     earn_amount, max_points_per_tx, max_amount_per_tx, daily_limit_per_card, min_minutes_between, welcome_bonus,
-    terms, bg_color, text_color, accent_color, logo_url, stamp_icon, starts_at, ends_at, all_branches, join_enabled, created_by)
+    terms, bg_color, text_color, accent_color, logo_url, stamp_icon, theme, starts_at, ends_at, all_branches, join_enabled, created_by)
   values (v_p.merchant_id, v_p.type, left(v_p.name || ' (copia)', 60), v_p.description, v_p.stamps_required,
     v_p.max_units_per_tx, v_p.earn_points, v_p.earn_amount, v_p.max_points_per_tx, v_p.max_amount_per_tx,
     v_p.daily_limit_per_card, v_p.min_minutes_between, v_p.welcome_bonus, v_p.terms, v_p.bg_color, v_p.text_color,
-    v_p.accent_color, v_p.logo_url, v_p.stamp_icon, v_p.starts_at, v_p.ends_at, v_p.all_branches, v_p.join_enabled, auth.uid())
+    v_p.accent_color, v_p.logo_url, v_p.stamp_icon, v_p.theme, v_p.starts_at, v_p.ends_at, v_p.all_branches, v_p.join_enabled, auth.uid())
   returning id into v_new;
   insert into public.program_branches (program_id, branch_id, merchant_id)
     select v_new, branch_id, merchant_id from public.program_branches where program_id = p_program;
@@ -360,7 +360,7 @@ begin
       'status', v_p.status, 'stamps_required', v_p.stamps_required, 'earn_points', v_p.earn_points,
       'earn_amount', v_p.earn_amount, 'welcome_bonus', v_p.welcome_bonus, 'terms', v_p.terms,
       'bg_color', v_p.bg_color, 'text_color', v_p.text_color, 'accent_color', v_p.accent_color,
-      'logo_url', coalesce(v_p.logo_url, v_m.logo_url), 'stamp_icon', v_p.stamp_icon,
+      'logo_url', coalesce(v_p.logo_url, v_m.logo_url), 'stamp_icon', v_p.stamp_icon, 'theme', v_p.theme,
       'starts_at', v_p.starts_at, 'ends_at', v_p.ends_at, 'join_code', v_p.join_code),
     'merchant', jsonb_build_object('name', v_m.name, 'slug', v_m.slug, 'category', v_m.category,
       'description', v_m.description, 'logo_url', v_m.logo_url, 'brand_color', v_m.brand_color,
@@ -459,7 +459,7 @@ returns jsonb language sql stable security definer set search_path = '' as $$
     'lifetime_earned', c.lifetime_earned, 'last_activity_at', c.last_activity_at, 'created_at', c.created_at,
     'program', jsonb_build_object('id', p.id, 'type', p.type, 'name', p.name, 'status', p.status,
       'stamps_required', p.stamps_required, 'bg_color', p.bg_color, 'text_color', p.text_color,
-      'accent_color', p.accent_color, 'logo_url', coalesce(p.logo_url, m.logo_url), 'stamp_icon', p.stamp_icon),
+      'accent_color', p.accent_color, 'logo_url', coalesce(p.logo_url, m.logo_url), 'stamp_icon', p.stamp_icon, 'theme', p.theme),
     'merchant', jsonb_build_object('name', m.name, 'logo_url', m.logo_url, 'category', m.category),
     'rewards_ready', (select count(*) from public.rewards r where r.program_id = p.id and r.status = 'active'
                        and public.reward_block_reason(c, r, p, null) is null)
@@ -486,7 +486,7 @@ begin
     'program', jsonb_build_object('id', v_p.id, 'type', v_p.type, 'name', v_p.name, 'description', v_p.description,
       'status', v_p.status, 'stamps_required', v_p.stamps_required, 'earn_points', v_p.earn_points,
       'earn_amount', v_p.earn_amount, 'terms', v_p.terms, 'bg_color', v_p.bg_color, 'text_color', v_p.text_color,
-      'accent_color', v_p.accent_color, 'logo_url', coalesce(v_p.logo_url, v_m.logo_url), 'stamp_icon', v_p.stamp_icon,
+      'accent_color', v_p.accent_color, 'logo_url', coalesce(v_p.logo_url, v_m.logo_url), 'stamp_icon', v_p.stamp_icon, 'theme', v_p.theme,
       'ends_at', v_p.ends_at),
     'merchant', jsonb_build_object('name', v_m.name, 'logo_url', v_m.logo_url, 'address', v_m.address,
       'city', v_m.city, 'phone', v_m.phone, 'instagram', v_m.instagram, 'website', v_m.website),
@@ -565,7 +565,7 @@ begin
       'program', jsonb_build_object('id', v_p.id, 'type', v_p.type, 'name', v_p.name, 'status', v_p.status,
         'stamps_required', v_p.stamps_required, 'max_units_per_tx', v_p.max_units_per_tx,
         'earn_points', v_p.earn_points, 'earn_amount', v_p.earn_amount, 'max_amount_per_tx', v_p.max_amount_per_tx,
-        'bg_color', v_p.bg_color, 'text_color', v_p.text_color, 'accent_color', v_p.accent_color, 'stamp_icon', v_p.stamp_icon),
+        'bg_color', v_p.bg_color, 'text_color', v_p.text_color, 'accent_color', v_p.accent_color, 'stamp_icon', v_p.stamp_icon, 'theme', v_p.theme),
       'rewards', public.card_rewards_json(v_c, p_branch),
       'recent', (select coalesce(jsonb_agg(x order by x.created_at desc), '[]'::jsonb) from (
                    select t.id, t.type, t.delta, t.units, t.status, t.created_at from public.card_transactions t

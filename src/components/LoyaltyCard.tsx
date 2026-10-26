@@ -3,6 +3,7 @@ import type { CardLook } from '../lib/types';
 import { initials } from '../lib/format';
 import { formatCardCode } from '../lib/qr';
 import { programType } from '../lib/constants';
+import { ThemedCard } from './ThemedCard';
 
 export const STAMP_ICON_MAP: Record<string, LucideIcon> = {
   star: Star, coffee: Coffee, heart: Heart, check: Check, scissors: Scissors, paw: PawPrint,
@@ -10,7 +11,8 @@ export const STAMP_ICON_MAP: Record<string, LucideIcon> = {
 };
 
 /** Tarjeta de fidelización con la identidad visual del comercio. */
-export function LoyaltyCard({ look, compact }: { look: CardLook; compact?: boolean }) {
+export function LoyaltyCard({ look, compact, onTap }: { look: CardLook; compact?: boolean; onTap?: () => void }) {
+  if (look.theme && look.theme !== 'classic') return <ThemedCard look={look} onTap={onTap} />;
   const Icon = STAMP_ICON_MAP[look.stampIcon] ?? Star;
   const t = programType(look.type);
   const isSlots = (look.type === 'stamps' || look.type === 'visits') && look.stampsRequired;
